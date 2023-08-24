@@ -1,0 +1,10 @@
+name: medical-terminology-translator
+channels:
+  - https://conda.anaconda.org/conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - langchain>=0.0.219
+    - boto3>=1.26.159
+    - streamlit
