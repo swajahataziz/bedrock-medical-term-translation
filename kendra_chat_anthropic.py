@@ -2,6 +2,8 @@ from langchain.retrievers import AmazonKendraRetriever
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatAnthropic as Anthropic
+from langchain.llms.bedrock import Bedrock
+
 import sys
 import os
 
@@ -39,7 +41,7 @@ def build_chain():
     
     # - create the Anthropic Model
     llm = Bedrock(model_id="anthropic.claude-v2", client=boto3_bedrock, model_kwargs={'max_tokens_to_sample':512})
-        
+    print("Using Kendra Index:"+ kendra_index_id +" in region:"+region)
     retriever = AmazonKendraRetriever(index_id=kendra_index_id,region_name=region)
 
     prompt_template = """
