@@ -80,7 +80,7 @@ def write_top_bar():
     with col1:
         st.image(AI_ICON, use_column_width='always')
     with col2:
-        header = f"Medical Terminology Translator powered by Amazon Kendra and Amazon Bedrock (Claude)!"
+        header = f"Medical Knowledge Assistant powered by Amazon Kendra and Amazon Bedrock (Claude)!"
         st.write(f"<h3 class='main-header'>{header}</h3>", unsafe_allow_html=True)
     with col3:
         clear = st.button("Clear Chat")
