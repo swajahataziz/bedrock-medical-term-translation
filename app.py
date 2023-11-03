@@ -5,13 +5,21 @@ from pathlib import Path
 import json, os, sys, re, random, traceback
 
 import kendra_chat_anthropic as anthropic
+import kendra_chat_llama_2 as llama2
+import kendra_chat_bedrock_titan as bedrock_titan
+import kendra_chat_bedrock_claude as bedrock_claude
+import kendra_chat_bedrock_claudev2 as bedrock_claudev2
 
 USER_ICON = "images/user-icon.png"
 AI_ICON = "images/ai-icon.png"
 MAX_HISTORY_LENGTH = 5
 
 PROVIDER_MAP = {
-    'anthropic': 'Anthropic'
+    'anthropic': 'Anthropic',
+    'bedrock_titan':'titan',
+    'bedrock_claude':'claude',
+    'bedrock_claudev2':'claude2',
+    'llama2':'llama2'
 }
 
 docs = [doc.read_text() for doc in sorted((Path.cwd() / "resources" / "docs").iterdir(), key=lambda x: x.name)]
@@ -27,8 +35,28 @@ else:
     st.session_state['user_id'] = user_id
 
 
-st.session_state['llm_app'] = anthropic
-st.session_state['llm_chain'] = anthropic.build_chain()
+if 'llm_chain' not in st.session_state:
+    if(len(sys.argv)> 1):
+        if (sys.argv[1] == 'anthropic'):
+            st.session_state['llm_app'] = anthropic
+            st.session_state['llm_chain'] = anthropic.build_chain()
+        elif (sys.argv[1] == 'llama2'):
+            st.session_state['llm_app'] = llama2
+            st.session_state['llm_chain'] = llama2.build_chain()
+        elif (sys.argv[1] == 'bedrock_titan'):
+            st.session_state['llm_app'] = bedrock_titan
+            st.session_state['llm_chain'] = bedrock_titan.build_chain()
+        elif (sys.argv[1] == 'bedrock_claude'):
+            st.session_state['llm_app'] = bedrock_claude
+            st.session_state['llm_chain'] = bedrock_claude.build_chain()
+        elif (sys.argv[1] == 'bedrock_claudev2'):
+            st.session_state['llm_app'] = bedrock_claudev2
+            st.session_state['llm_chain'] = bedrock_claudev2.build_chain()
+        else:
+            raise Exception("Unsupported LLM: ", sys.argv[1])
+    else:
+        raise Exception("Usage: streamlit run app.py <anthropic|bedrock_titan|bedrock_claude|bedrock|claudev2>")
+
 
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
@@ -80,7 +108,7 @@ def write_top_bar():
     with col1:
         st.image(AI_ICON, use_column_width='always')
     with col2:
-        header = f"Medical Knowledge Assistant powered by Amazon Kendra and Amazon Bedrock (Claude)!"
+        header = f"Medical Knowledge Assistant powered by Amazon Kendra and Amazon Bedrock!"
         st.write(f"<h3 class='main-header'>{header}</h3>", unsafe_allow_html=True)
     with col3:
         clear = st.button("Clear Chat")

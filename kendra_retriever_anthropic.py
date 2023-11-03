@@ -32,21 +32,21 @@ def build_chain():
 
     prompt_template = """
 
-      Human: You are an AI assistant helping patients understand medical terminologies. 
+      \n\nHuman: You are an AI assistant helping patients understand medical terminologies. 
       You are talkative and provide specific details from the context but limits it to 2000 tokens.
       If you do not know the answer to a question, you truthfully says you 
       do not know.
 
-      Assistant: OK, got it, I'll be a talkative truthful AI assistant.
+      \n\nAssistant: OK, got it, I'll be a talkative truthful AI assistant.
 
-      Human: Here are a few resources in <documents> tags:
+      \n\nHuman: Here are a few resources in <documents> tags:
       <documents>
       {context}
       </documents>
       Based on the above context, provide a detailed answer for, {question} Answer "don't know" 
       if not present in the resources provided. Start your answer with, "Based on the information provided from some trusted sources..." 
 
-      Assistant:"""
+      \n\nAssistant:"""
 
     PROMPT = PromptTemplate(
           template=prompt_template, input_variables=["context", "question"]
