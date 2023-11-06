@@ -4,11 +4,11 @@ import sys
 from pathlib import Path
 import json, os, sys, re, random, traceback
 
-import kendra_chat_anthropic as anthropic
 import kendra_chat_llama_2 as llama2
 import kendra_chat_bedrock_titan as bedrock_titan
 import kendra_chat_bedrock_claude as bedrock_claude
 import kendra_chat_bedrock_claudev2 as bedrock_claudev2
+
 
 USER_ICON = "images/user-icon.png"
 AI_ICON = "images/ai-icon.png"
@@ -37,10 +37,7 @@ else:
 
 if 'llm_chain' not in st.session_state:
     if(len(sys.argv)> 1):
-        if (sys.argv[1] == 'anthropic'):
-            st.session_state['llm_app'] = anthropic
-            st.session_state['llm_chain'] = anthropic.build_chain()
-        elif (sys.argv[1] == 'llama2'):
+        if (sys.argv[1] == 'llama2'):
             st.session_state['llm_app'] = llama2
             st.session_state['llm_chain'] = llama2.build_chain()
         elif (sys.argv[1] == 'bedrock_titan'):
