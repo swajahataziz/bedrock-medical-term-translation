@@ -20,31 +20,16 @@ class bcolors:
 
 MAX_HISTORY_LENGTH = 5
 
-# create an STS client object that represents a live connection to the 
-# STS service
-sts_client = boto3.client('sts')
-
-# Call the assume_role method of the STSConnection object and pass the role
-# ARN and a role session name.
-assumed_role_object=sts_client.assume_role(
-    RoleArn="arn:aws:iam::111918798052:role/Admin",
-    RoleSessionName="AssumeRoleBedrock"
-)
-
-# From the response that contains the assumed role, get the temporary 
-# credentials that can be used to make subsequent API calls
-credentials=assumed_role_object['Credentials']
 
 def build_chain():
   region = os.environ["AWS_REGION"]
   kendra_index_id = os.environ["KENDRA_INDEX_ID"]
+  credentials_profile = os.environ["AWS_PROFILE"]
 
 
 
   llm = Bedrock(
-      aws_access_key_id=credentials['AccessKeyId'],
-      aws_secret_access_key=credentials['SecretAccessKey'],
-      aws_session_token=credentials['SessionToken'],
+      credentials_profile_name=credentials_profile,
       region_name = region,
       model_kwargs={"max_tokens_to_sample":300,"temperature":1,"top_k":250,"top_p":0.999,"anthropic_version":"bedrock-2023-05-31"},
       model_id="anthropic.claude-v1"
